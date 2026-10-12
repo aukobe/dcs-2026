@@ -389,3 +389,57 @@ A verificação da T-01 passou (healthy e 200). Conclua o passo 5 do prompt:
 3. Proponha a mensagem de commit no formato tipo(T-01): descrição [RF-03, RF-07], e pare.
 ```
 
+## P06: Implementação (T-02)
+
+- Data e hora: 12/10/2026 10:35
+- Quem enviou: Augusto
+- Modelo usado: openrouter/openrouter/free
+- Arquivos alterados: aula_01_minio/minio_railway/Dockerfile, aula_01_minio/specs/tasks.md, aula_01_minio/docs/evidencias/T-02_dockerfile.txt
+- Resultado da revisão ("Revise antes de seguir"): aceito. O Dockerfile ficou correto na primeira versão (imagem com tag fixada, EXPOSE 9000 9001 e CMD do servidor, sem credenciais) e o docker build passou. A IA parou antes de salvar a evidência e de marcar a tarefa, então pedi que concluísse o passo 5.
+
+```text
+[C] Personagem
+Você é um engenheiro de dados que implementa com disciplina de testes. Você executa uma única tarefa, prova que ela funciona com a saída real do terminal e para.
+
+[R] Pedido
+Implemente a tarefa T-02 de specs/tasks.md. Siga esta ordem:
+1. mostre o plano: arquivos que vai criar ou alterar e o comando de verificação;
+2. espere minha confirmação;
+3. crie ou altere os arquivos;
+4. execute a verificação indicada na tarefa e mostre a saída real;
+5. se passou, salve a saída em docs/evidencias/T-02_<nome>.txt, marque a tarefa como [x] em specs/tasks.md e proponha a mensagem de commit no formato tipo(T-02): descrição [RF-07].
+
+[E] Exemplos
+Evidência bem registrada (docs/evidencias/T-01_compose.txt):
+$ docker compose ps
+NAME                  IMAGE                                                   STATUS
+minio_local-minio-1   ghcr.io/coollabsio/minio:RELEASE.2025-10-15T17-29-55Z   Up 20 seconds (healthy)
+$ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:9000/minio/health/live
+200
+Mensagem de commit: feat(T-01): MinIO local com healthcheck e volume nomeado [RF-03]
+
+[A] Ajustes
+- Faça somente a tarefa pedida. Não adiante outras tarefas.
+- Use a imagem ghcr.io/coollabsio/minio:RELEASE.2025-10-15T17-29-55Z; nunca latest.
+- O Dockerfile em minio_railway/ não contém nenhuma credencial: só FROM com a tag fixada, EXPOSE 9000 9001 e CMD ["server", "/data", "--console-address", ":9001"].
+- Scripts em bash começam com set -euo pipefail, carregam o .env com "set -a; . ./.env; set +a" e nunca imprimem senha (não use set -x, não ecoe variáveis de credencial).
+- Não leia nem imprima o arquivo .env.
+- Não execute docker compose down -v nem apague buckets. Não execute comandos do Railway nesta tarefa.
+- Se a verificação falhar, mostre o erro e tente corrigir no máximo duas vezes; depois disso, pare e explique.
+- Não declare sucesso sem mostrar a saída do comando.
+
+[T] Tipo de saída
+Os arquivos da tarefa, a atualização de specs/tasks.md, o arquivo de evidência e um resumo de até cinco linhas com o que mudou e a mensagem de commit proposta.
+
+[E] Extras
+Leia antes: AGENTS.md, specs/spec.md, specs/plan.md, specs/tasks.md e o docker-compose.yml já criado na T-01.
+Verificação da T-02: executar docker build -t minio-teste minio_railway/ e conferir com grep que o Dockerfile contém a tag RELEASE.2025-10-15T17-29-55Z e CMD server /data --console-address ":9001".
+Conclua todos os passos, inclusive salvar a evidência e marcar a tarefa, antes de parar. Pare ao final da tarefa.
+```
+
+Mensagem enviada em seguida (concluir a tarefa):
+
+```text
+O build da T-02 passou. Conclua a tarefa: execute o grep que confirma a tag RELEASE.2025-10-15T17-29-55Z e o CMD no minio_railway/Dockerfile, mostre a saída real, salve a saída do build e do grep em docs/evidencias/T-02_dockerfile.txt, marque a T-02 como [x] em specs/tasks.md e proponha a mensagem de commit no formato tipo(T-02): descrição [RF-07]. Pare ao final.
+```
+
