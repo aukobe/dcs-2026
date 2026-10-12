@@ -1,0 +1,17 @@
+$ docker compose config --quiet
+(no output)
+
+$ docker compose up -d --wait
+ Container aula_01_minio-minio-1 Recreate 
+ Container aula_01_minio-minio-1 Recreated 
+ Container aula_01_minio-minio-1 Starting 
+ Container aula_01_minio-minio-1 Started 
+ Container aula_01_minio-minio-1 Waiting 
+ Container aula_01_minio-minio-1 Healthy 
+
+$ docker compose ps
+NAME                    IMAGE                                                   COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+aula_01_minio-minio-1   ghcr.io/coollabsio/minio:RELEASE.2025-10-15T17-29-55Z   "/usr/bin/docker-ent…"   minio     8 seconds ago   Up 7 seconds (healthy)   0.0.0.0:9000-9001->9000-9001/tcp, [::]:9000-9001->9000-9001/tcp
+
+$ curl -s -o /dev/null -w '%{http_code}' http://localhost:9000/minio/health/live
+200
